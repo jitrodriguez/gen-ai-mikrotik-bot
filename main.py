@@ -1,23 +1,28 @@
 import streamlit as st
 from app.controllers.chat_controller import ChatController
 from app.controllers.sidebar_controller import SidebarController
-import time
-# from app.views.ui_view import display_ui
+from app.models.database import SQLiteDB
 
-st.set_page_config(layout="wide",page_title="Mikrotik Bot",page_icon="🤖")
+st.set_page_config(layout="wide", page_title="Mikrotik Bot", page_icon="🤖")
+
+# Crear una instancia de la base de datos
+db = SQLiteDB("app/database/database.db")
+db.connect()
+
+conn = st.connection('database', type='sql')
 
 # Dividir en columnas
-
 row2 = st.container()
 
 with row2:
-    with st.container( border=False):
+    with st.container(border=False):
         # Mostrar el chat
-        chat_controller = ChatController()
+        chat_controller = ChatController(db)
         chat_controller.start()
+
 with st.sidebar:
-    sidebar_controller = SidebarController()
+    sidebar_controller = SidebarController(conn)
     sidebar_controller.start()
-    # with st.spinner("Loading..."):
-    #     time.sleep(5)
-    # st.success("Done!")
+
+# Cerrar la conexión a la base de datos al final
+db.close()

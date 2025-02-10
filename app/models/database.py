@@ -1,13 +1,18 @@
 import sqlite3
 
-
 class SQLiteDB:
-    def __init__(self, db_path):
-        self.db_path = db_path
-        self.connection = None
+    _instance = None
+
+    def __new__(cls, db_path):
+        if cls._instance is None:
+            cls._instance = super(SQLiteDB, cls).__new__(cls)
+            cls._instance.db_path = db_path
+            cls._instance.connection = None
+        return cls._instance
 
     def connect(self):
-        self.connection = sqlite3.connect(self.db_path)
+        if self.connection is None:
+            self.connection = sqlite3.connect(self.db_path)
 
     def create_product_table(self):
         with self.connection:
@@ -109,3 +114,4 @@ class SQLiteDB:
     def close(self):
         if self.connection:
             self.connection.close()
+            self.connection = None
