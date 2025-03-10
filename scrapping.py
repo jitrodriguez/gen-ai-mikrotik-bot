@@ -5,7 +5,10 @@ def main():
     db_path = './app/database/database_test.db'
     # data_controller = DataController(db_path)
     data_controller = DataControllerSelenium(db_path)
-    products_json = data_controller.fetch_products()
+    # products_json = data_controller.fetch_products()
+    # products_json = data_controller.fetch_all_products()
+    # data_controller.fetch_product_specifications(745)
+    data_controller.fetch_products_info()
     data_controller.close_db()
     # Aquí puedes hacer algo con el JSON de productos, como guardarlo en un archivo
 
