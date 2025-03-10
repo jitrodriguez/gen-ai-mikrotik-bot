@@ -3,7 +3,6 @@ class ProductModel:
         self.conn = conn
 
     def get_top_n_products(self, n):
-        # with self.conn.session as s:
         query = """
             SELECT id, name, image, code, price FROM products
             LIMIT :n
