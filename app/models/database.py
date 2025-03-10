@@ -269,6 +269,15 @@ class SQLiteDB:
                 (product_id,category_id,),
             )
 
+    def create_specification_table(self):
+        with self.connection:
+            self.connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS specifications (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT
+                )"""
+            )
     def close(self):
         if self.connection:
             self.connection.close()
