@@ -1,0 +1,12 @@
+print_router_state = False
+print_main_state = False
+print_main_result = False
+print_rephraser_state = False
+print_rephrased_message = True
+print_about_state = False
+print_next = True
+print_next_think = True
+print_tool_calls = True
+print_compare_state = False
+print_connectivity_specs_query = True
+print_power_specs_query = True

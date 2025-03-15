@@ -45,7 +45,7 @@ class DataController:
         product_json = json.dumps(product_list, indent=4)
 
         # Imprimir el JSON
-        print(product_json)
+        # print(product_json)
 
         return product_json
 

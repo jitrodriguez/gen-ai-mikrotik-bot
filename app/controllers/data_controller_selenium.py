@@ -18,6 +18,7 @@ class DataControllerSelenium:
         self.url = f'{self.base_url}/products/'
         self.db = SQLiteDB(db_path)
         self.db2 = SQLiteDB2(db_path)
+        self.db_path = db_path
         self.db.connect()
         self.db.create_product_table()
         self.db.create_category_table()
@@ -88,9 +89,8 @@ class DataControllerSelenium:
         category_name = category['name']
         category_url = category['url']
         category_id = category['id']
-        
         # Realizar la solicitud HTTP con requests
-        response = requests.get(category_url)
+        response = requests.get(self.base_url+category_url)
         response.raise_for_status()
         
         # Analizar el contenido HTML con BeautifulSoup
@@ -140,6 +140,13 @@ class DataControllerSelenium:
 
         # Guardar los productos en la base de datos
         for product in self.products.values():
+            try:
+                product['price'] = product['price'].replace('$','').strip()
+                product['price'] = float(product['price'])
+                product['currency'] = 'USD'
+            except:
+                print(f'Error converting price to float for product {product["id"]}', product['price'])
+                pass
             self.db.insert_product(product=product)
             product_categories = product['categories']
             for category_id in product_categories:
@@ -190,27 +197,26 @@ class DataControllerSelenium:
             driver.quit()  # Cierra el driver al finalizar
 
     def fetch_product_specifications_not_selenium(self,product_url, product_id, all_specs_lock):
-        db2 = SQLiteDB2('./app/database/database_test.db')
+        db2 = SQLiteDB2(self.db_path)
         db2.connect()
         try:
             response = requests.get(product_url)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.content, 'html.parser')
-            specifications_table = soup.select_one('div#specifications table.product-table tbody')
-            rows = specifications_table.find_all('tr')
+            # specifications_table  = soup.select_one('div#specifications table.product-table tbody')
+            all_tables = soup.select('div#specifications table.product-table tbody')
+            # join all tables
+            full_specifications = []
+            for table in all_tables:
+                rows = table.find_all('tr')
+                full_specifications.extend(rows)
+            rows = full_specifications
+            print('len of rows:', len(rows),'for product:', product_url)
             specifications = {}
 
             thread_specs = set()
             rare_specifications = ['vswr','reflector','purpose','2ghz','5ghz','matching','ip','sfp+_ports','max_power_consumption','max_power_consumption_without_attachments','number_of_1g_2_5g_5g_10g_ethernet_ports']
-            labels = {
-                    'vswr': 'Voltage Standing Wave Ratio (VSWR)',
-                    'max_out_per_port_output_(input_18_30_v)': 'Max out per port output (input 18-30 V)',
-                    '2ghz': 'Allow 2GHz',
-                    '5ghz': 'Allow 5GHz',
-                    'matching': 'Matching',
-                    'ip': 'IP (International Protection)'
-                }
             equivalents = {
                 '2ghz': 'allow_2ghz',
                 '5ghz': 'allow_5ghz',
@@ -232,10 +238,19 @@ class DataControllerSelenium:
 
                     # specifications.append({'key': key, 'value': value})
                     specification_name = key.lower().replace(' ', '_').replace('-', '_').replace('.','_').replace('/','_')
-                    if specification_name in rare_specifications:
-                        print(f'Rare specification found: {specification_name} in product {product_url}')
+                    if specification_name == 'sfp_ports' and value == '1 (2.5G supported)':
+                        value = 1
+                    if specification_name == 'max_power_consumption':
+                        value = float(value.split('W')[0].strip())
+                    if specification_name == 'max_power_consumption_without_attachments':
+                        value = float(value.split('W')[0].strip())
+                    if specification_name == 'current':
+                        value = float(value.split('A')[0].strip())
+                    # if specification_name in rare_specifications:
+                    #     print(f'Rare specification found: {specification_name} in product {product_url}')
                     if specification_name in equivalents:
                         specification_name = equivalents[specification_name]
+
                     specifications[specification_name] = value
                     thread_specs.add(specification_name)
 
@@ -256,7 +271,7 @@ class DataControllerSelenium:
             db2.close()
 
     def fetch_products_info(self):
-        self.all_possible_specifications = set()
+        # self.all_possible_specifications = set()
         all_specs_lock = threading.Lock()
         products = self.db.get_top_n_products(500)
 
@@ -265,16 +280,16 @@ class DataControllerSelenium:
 
             futures = [executor.submit(
                 self.fetch_product_specifications_not_selenium,
-                product['url'],
+                self.base_url+product['url'],
                 product['id'],
                 all_specs_lock
             ) for product in products]
             concurrent.futures.wait(futures)
 
-        for specification in self.all_possible_specifications:
-            print(specification)
-        print('Finished fetching product specifications')
-        print('Total specifications:', len(self.all_possible_specifications))
+        # for specification in self.all_possible_specifications:
+        #     print(specification)
+        # print('Finished fetching product specifications')
+        # print('Total specifications:', len(self.all_possible_specifications))
         self.db2.close()
 
     def separate_specifications(self, specifications):

@@ -35,4 +35,5 @@ class SidebarController:
 
     def show_more_info(self, product):
         # Lógica para mostrar más información del producto
-        print(product)
+        # print(product)
+        pass

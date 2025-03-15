@@ -8,6 +8,7 @@ class Product:
         model=None,
         description=None,
         image=None,
+        price=None,
         primary_button_label=None,
         secondary_button_label=None,
         tertiary_button_label=None,
@@ -18,6 +19,7 @@ class Product:
         self.name = name
         self.model = model
         self.description = description
+        self.price = price
         self.image = image
         self.primary_button_label = primary_button_label
         self.secondary_button_label = secondary_button_label
@@ -33,6 +35,8 @@ class Product:
                 st.image(self.image, width=50)
             with nameCol:
                 st.write(f"**{self.name}**")
+                if self.price:
+                    st.write(f"${self.price}")
             if self.primary_button_label:
                 st.button(
                     self.primary_button_label,

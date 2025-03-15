@@ -25,7 +25,8 @@ class SQLiteDB:
                     image TEXT,
                     url TEXT,
                     description TEXT,
-                    price TEXT
+                    price INTEGER,
+                    currency TEXT
                 )"""
             )
 
@@ -33,8 +34,8 @@ class SQLiteDB:
         with self.connection:
             self.connection.execute(
                 """
-                INSERT OR REPLACE INTO products (id, name, code, image, url, description, price)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT OR REPLACE INTO products (id, name, code, image, url, description, price, currency)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
                 (
                     product["id"],
@@ -44,6 +45,7 @@ class SQLiteDB:
                     product["url"],
                     product["description"],
                     product["price"],
+                    product["currency"]
                 ),
             )
 
