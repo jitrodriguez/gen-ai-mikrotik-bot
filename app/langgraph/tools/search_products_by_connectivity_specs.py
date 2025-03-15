@@ -1,17 +1,11 @@
-from typing import List, Dict, Optional, Tuple, TypedDict, Literal
-from sqlalchemy.orm import Session
-from sqlalchemy import text
+from typing import List, Optional, TypedDict, Literal
 from langchain_core.tools import tool
-from langchain_core.messages import HumanMessage, ToolMessage, SystemMessage
-from langchain_ollama import ChatOllama
-from typing import Annotated
+from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_openai import ChatOpenAI
 from pydantic import Field
 import streamlit as st
 import configs as cfg
 
-llm = ChatOllama(
-    model='llama3.2:latest'
-)
 
 comparison_expressions = Literal["=", "==", "<", "<=", ">", ">=", "!=", "", "IN", "NOT IN", "IS", "IS NOT","like"]
 columns = Literal['number_10_100_1000_ethernet_ports','number_of_1g_ethernet_ports_with_poe_out','number_of_1g_2_5g_5g_10g_ethernet_ports','sfp_ports','sfp_plus_ports','port_to_port_isolation','operating_system']
@@ -45,6 +39,9 @@ desc = f"""
     """
 @tool(description=desc)
 def search_products_by_connectivity_specs(summarized_question: str, category_id:Optional[int]) -> str:
+    llm = ChatOpenAI(
+        model='gpt-4o'
+    )
     try:
         # TODO: Convertir esto en variable
         query = """
