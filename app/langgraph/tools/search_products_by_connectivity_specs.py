@@ -39,7 +39,6 @@ desc = f"""
     {connectivity_specs_unique_values_str}
     Examples:
         * search_products_by_connectivity_specs("number_10_100_1000_ethernet_ports less than 2","1")
-        * search_products_by_connectivity_specs("operating_system RouterOS Rose Edition","2")
         * search_products_by_connectivity_specs("operating_system RouterOS Rose Edition","3")
 
     Recuerda: solo puedes mencionar las especificaciones en la tabla de especificaciones de conectividad.

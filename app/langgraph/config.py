@@ -16,8 +16,8 @@ class LLMInstance:
         if cls._instance is None:
             cls._instance = super(LLMInstance, cls).__new__(cls)
             # Aquí podemos cambiar a cualquier modelo de llm
-            cls._instance.main_llm = ChatOllama(model='llama3.2:latest',temperature=0)
-            # cls._instance.main_llm = ChatOpenAI(model="gpt-4o",temperature=0)
+            # cls._instance.main_llm = ChatOllama(model='llama3.2:latest',temperature=0)
+            cls._instance.main_llm = ChatOpenAI(model="gpt-4o",temperature=0)
         return cls._instance
 
 class MyMessageState(TypedDict):
