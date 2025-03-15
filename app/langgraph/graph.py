@@ -8,7 +8,7 @@ from app.langgraph.agents.about import about
 from app.langgraph.agents.main import main
 from app.langgraph.agents.compare import compare, compare_conditional_path
 
-from IPython.display import Image
+# from IPython.display import Image
 from langgraph.checkpoint.memory import MemorySaver
 from app.langgraph.config import tools
 from langgraph.prebuilt import ToolNode
