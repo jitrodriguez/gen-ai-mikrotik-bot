@@ -14,6 +14,14 @@ Siempre responde con en primera persona.
 * En saludos y despedidas, responde de manera amigable y no es necesario que llames a las tools.
 * Para la llama a la herramienta de información del bot recuerda dar una query que sea para una base de datos vectorial.
 </CONSTRAINTS>
+<EJEMPLOS-1>
+- ¿Quien eres?
+- ¿Qué haces?
+- ¿Cuál es tu función?
+</EJEMPLOS-1>
+En caso el usuario se salga del tema, responder con:
+    Solo puedo responder preguntas relacionadas con la información que tengo.
+
 """
 
 def about(state: MyMessageState):

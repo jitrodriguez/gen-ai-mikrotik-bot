@@ -34,11 +34,11 @@ def get_products_info( product_id_1:str='',product_id_2:str='',product_id_3:str=
     general_query = f"""
     SELECT { ",".join(p_columns)}, {",".join(c_columns)}, {",".join(phs_columns)}, {",".join(ps_columns)}, {",".join(ts_columns)}, {",".join(ws_columns)}
     from products p
-    FULL OUTER JOIN connectivity_specs c ON p.id = c.product_id
-    FULL OUTER JOIN physical_specs phs ON p.id = phs.product_id
-    FULL OUTER JOIN power_specs ps ON p.id = ps.product_id
-    FULL OUTER JOIN tech_specs ts ON p.id = ts.product_id
-    FULL OUTER JOIN wireless_specs ws ON p.id = ws.product_id
+    LEFT JOIN connectivity_specs c ON p.id = c.product_id
+    LEFT JOIN physical_specs phs ON p.id = phs.product_id
+    LEFT JOIN power_specs ps ON p.id = ps.product_id
+    LEFT JOIN tech_specs ts ON p.id = ts.product_id
+    LEFT JOIN wireless_specs ws ON p.id = ws.product_id
     """
     #  validate that at least 2 products are provided
     if(product_id_1 == "" and product_id_2 == "" and product_id_3 == "" and product_id_4 == ""):

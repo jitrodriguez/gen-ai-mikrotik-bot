@@ -51,7 +51,7 @@ def search_products_by_connectivity_specs(summarized_question: str, category_id:
             SELECT p.id, p.name, p.price, p.description, cp.number_10_100_1000_ethernet_ports,cp.number_of_1g_ethernet_ports_with_poe_out,
             cp.number_of_1g_2_5g_5g_10g_ethernet_ports, cp.sfp_ports, cp.sfp_plus_ports, cp.port_to_port_isolation, cp.operating_system,p.image
             FROM products p
-            FULL OUTER JOIN connectivity_specs cp ON p.id = cp.product_id
+            LEFT JOIN connectivity_specs cp ON p.id = cp.product_id
             {category_join}
             WHERE {generated_query}
             {category_condition}
@@ -75,7 +75,7 @@ def search_products_by_connectivity_specs(summarized_question: str, category_id:
         )
 
         if category_id:
-            category_join = "FULL OUTER JOIN product_category pc ON p.id = pc.product_id"
+            category_join = "LEFT JOIN product_category pc ON p.id = pc.product_id"
             category_condition = f"AND pc.category_id = {category_id}"
         else:
             category_join = ""

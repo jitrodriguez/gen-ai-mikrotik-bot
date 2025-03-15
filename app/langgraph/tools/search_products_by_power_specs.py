@@ -27,7 +27,7 @@ def search_products_by_power_specs(max_power_consumption: float,min_power_consum
         query = """
             SELECT p.id, p.name, p.price, p.description, ps.max_power_consumption, p.image
             FROM products p
-            FULL OUTER JOIN power_specs ps ON p.id = ps.product_id
+            LEFT JOIN power_specs ps ON p.id = ps.product_id
             {category_join}
             WHERE ps.max_power_consumption <= {max_power_consumption} AND ps.max_power_consumption >= {min_power_consumption}
             {category_condition}
@@ -35,7 +35,7 @@ def search_products_by_power_specs(max_power_consumption: float,min_power_consum
         """
 
         if category_id:
-            category_join = "FULL OUTER JOIN product_category pc ON p.id = pc.product_id"
+            category_join = "LEFT JOIN product_category pc ON p.id = pc.product_id"
             category_condition = f"AND pc.category_id = {category_id}"
         else:
             category_join = ""

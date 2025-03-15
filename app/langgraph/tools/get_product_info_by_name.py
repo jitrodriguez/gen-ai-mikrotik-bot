@@ -24,7 +24,7 @@ def get_product_info_by_name(name: str) -> str:
             SELECT p.id, p.name, p.price, p.description, cp.number_10_100_1000_ethernet_ports,cp.number_of_1g_ethernet_ports_with_poe_out,
             cp.number_of_1g_2_5g_5g_10g_ethernet_ports, cp.sfp_ports, cp.sfp_plus_ports, cp.port_to_port_isolation, cp.operating_system,p.image
             FROM products p
-            FULL OUTER JOIN connectivity_specs cp ON p.id = cp.product_id
+            LEFT JOIN connectivity_specs cp ON p.id = cp.product_id
             WHERE p.name LIKE :name LIMIT 1
         """
         params = {"name": f"%{name}%"}
