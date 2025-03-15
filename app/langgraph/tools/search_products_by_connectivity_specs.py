@@ -14,9 +14,9 @@ llm = ChatOllama(
 )
 
 comparison_expressions = Literal["=", "==", "<", "<=", ">", ">=", "!=", "", "IN", "NOT IN", "IS", "IS NOT","like"]
-
+columns = Literal['number_10_100_1000_ethernet_ports','number_of_1g_ethernet_ports_with_poe_out','number_of_1g_2_5g_5g_10g_ethernet_ports','sfp_ports','sfp_plus_ports','port_to_port_isolation','operating_system']
 class Condition(TypedDict):
-    column: Literal['number_10_100_1000_ethernet_ports','number_of_1g_ethernet_ports_with_poe_out','number_of_1g_2_5g_5g_10g_ethernet_ports','sfp_ports','sfp_plus_ports','port_to_port_isolation','operating_system']
+    column: columns
     comparison_expression: Literal[comparison_expressions]= Field(description="Comparator operator (> | like | < | )")
     value: str= Field(description="Value to compare with ( eg. 2 | %RouterOS% ... )")
 class Conditions(TypedDict):
@@ -31,16 +31,18 @@ number_of_1g_2_5g_5g_10g_ethernet_ports | INTEGER
 sfp_ports  | INTEGER
 sfp_plus_ports | INTEGER
 port_to_port_isolation | TEXT | >40 dB min
-operating_system | RouterOS, RouterOS v5 and above, MikroTik SwOS, RouterOS v7, SwOS, RouterOS / SwitchOS, RouterOS v7 / SwitchOS, SwitchOS Lite, RouterOS v7 / SwOS, RouterOS v7 (Special ROSE edition) | TEXT
+operating_system | TEXT |RouterOS, RouterOS v5 and above, MikroTik SwOS, RouterOS v7, SwOS, RouterOS / SwitchOS, RouterOS v7 / SwitchOS, SwitchOS Lite, RouterOS v7 / SwOS, RouterOS v7 (Special ROSE edition) | TEXT
 """
 desc = f"""
-    Esta herramienta busca productos SOLO por especificaciones de conectividad. Debes proporcionar el valor posible según los valores únicos.
+    Busca productos por especificaciones de conectividad. por ejemplo, número de puertos ethernet, sistema operativo, etc.
     Las especificaciones de conectividad disponibles son:
     {connectivity_specs_unique_values_str}
     Examples:
         * search_products_by_connectivity_specs("number_10_100_1000_ethernet_ports less than 2","1")
         * search_products_by_connectivity_specs("operating_system RouterOS Rose Edition","2")
         * search_products_by_connectivity_specs("operating_system RouterOS Rose Edition","3")
+
+    Recuerda: solo puedes mencionar las especificaciones en la tabla de especificaciones de conectividad.
     """
 @tool(description=desc)
 def search_products_by_connectivity_specs(summarized_question: str, category_id:Optional[int]) -> str:

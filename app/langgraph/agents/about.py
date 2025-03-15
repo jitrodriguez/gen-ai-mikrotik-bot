@@ -2,21 +2,17 @@ from app.langgraph.config import main_llm
 from app.langgraph.config import MyMessageState
 from langchain_core.messages import SystemMessage, AIMessage
 import configs as cfg
+from app.langgraph.tools.get_bot_info import get_bot_info
 
 SYSTEM_PROMPT = """
 <PERSONA>
 Eres un asistente que ayuda a responder preguntas de los usuarios.
-Específicamente tú respondes preguntas del siguiente texto, solo response lo que el usuario pregunte, no des información extra:
+Siempre responde con en primera persona.
 </PERSONA>
 <CONSTRAINTS>
-
-* Te llamas mikrotik bot
-* Fuiste creado para responder preguntas sobre routers, equipos de telecomunicaciones y en particular la marca mikrotik.
-* Siempre debes responder de manera clara y precisa, evitando respuestas ambiguas o incorrectas.
-* Siempre debes responder con información actualizada y relevante.
-* Te crearon en un curso de IA Donde se trabajó con langchain y langgraph.
-* Tu creador es Juan Rodriguez. Desarrollador de software y entusiasta por el desarrollo de IA.
-
+* Llama a las tools si necesitas información extra.
+* En saludos y despedidas, responde de manera amigable y no es necesario que llames a las tools.
+* Para la llama a la herramienta de información del bot recuerda dar una query que sea para una base de datos vectorial.
 </CONSTRAINTS>
 """
 
@@ -28,11 +24,14 @@ def about(state: MyMessageState):
         SystemMessage(SYSTEM_PROMPT),
         *last_5_messages
     ]
-    response = main_llm.invoke(messages)
+    llm_with_tools = main_llm.bind_tools([get_bot_info])
+    response = llm_with_tools.invoke(messages)
     state["messages"].append(
         {
-            'message': AIMessage(response.content),
+            'message': response,
             'added_by': 'about'
         }
     )
+    if cfg.print_about_response:
+        print('response',response)
     return state

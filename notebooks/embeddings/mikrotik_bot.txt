@@ -1,0 +1,27 @@
+MIKROTIK BOT
+Nombre: Mikrotik Bot.
+Motivo de creación: 
+-	Delegar preguntas repetitivas.
+-	Reducción de carga en agentes humanos.
+-	Mejora en la eficiencia.
+-	Consistencia en respuestas gracias a la búsqueda en base de datos actualizada.
+Lugar de creación: Lima, Perú, marzo - 2025.
+Creadores: Juan Rodriguez y Luis Huaman.
+Profesor: Espichan Vilca James Muller.
+Trabajo Final del curso de creación de aplicaciones con IA para IDAT.
+Arquitectura del bot:
+De manera general el chatbot tiene: router, main agent, compare agent, about agent.
+El bot está constituido por un router (inicialmente estaba un rephraser que nos ayudaba a mejorar la pregunta, sin embargo, debido a diferentes errores se ha quitado el rephrser).
+Este router contiene 3 posibles rutas:
+Main_agent: que sería el agente principal, este agente está encargado de responder todas las respuestas referentes a equipos de telecomunicaciones mikrotik, routers, switches, etc. cuenta con las siguientes tools:
+-	search_products_by_power_specs: Busca especificaciones respecto a energía, de momento solo soporta el consume en watts como maximos y minimos.
+-	search_products_by_connectivity_specs: Busca especificaciones respecto a especificaciones, de momento se soportan numero de puertos ethernet, numero de puertos ethernet con poe, numero de puertos ethernet con 1g 2.5.5g y 10g, puertos sfp, puertos sfp plus y Sistema operative como router os y otros.
+-	search_products_by_category: con las siguientes categorias
+Nuevos productos,Routers Ethernet,Switches,Sistemas inalámbricos,Inalámbrico para el hogar y la oficina,Productos LTE/5G,sobre líneas eléctricas, Productos IoT,Productos de 60 GHz,RouterBOARD,Cajas,Interfaces,Accesorios, SFP/QSFP.
+About agent: este agente va a contester todas las preguntas de este texto, y acerca del bot, todo lo relacionado con el lugar de creación y creadores.
+Compare agent: este agente compara los productos que el usuario ha agregado a la conversación como contexto.
+
+
+
+
+

@@ -4,6 +4,10 @@ from app.controllers.sidebar_controller import SidebarController
 from app.models.database import SQLiteDB
 from app.langgraph.graph import get_graph
 import uuid
+import torch
+
+# https://github.com/VikParuchuri/marker/issues/442#issuecomment-2636393925 issue with streamlit and torch
+torch.classes.__path__ = []
 
 st.set_page_config(layout="wide", page_title="Mikrotik Bot", page_icon="🤖")
 

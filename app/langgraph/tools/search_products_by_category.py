@@ -6,15 +6,15 @@ from langchain_core.messages import HumanMessage, ToolMessage, SystemMessage
 import streamlit as st
 
 @tool
-def search_products_by_category(category_id: int, top_n: Optional[int] = 5, order_by: Optional[str] = None, order: Optional[str] = 'ASC', max_price:Optional[int] = None, min_price:Optional[int] = None) -> str:
-# def search_products_by_category(category_id: int, top_n: int = 5, order_by: Optional[str] = None, order: str = 'ASC', price_range: Optional[Tuple[float, float]] = None) -> List[Dict[str, str]]:
+def search_products_by_category(category_id: int, top_n: Optional[int] = 4, order_by: Optional[str] = None, order: Optional[str] = 'ASC', max_price:Optional[int] = None, min_price:Optional[int] = None) -> str:
+# def search_products_by_category(category_id: int, top_n: int = 4, order_by: Optional[str] = None, order: str = 'ASC', price_range: Optional[Tuple[float, float]] = None) -> List[Dict[str, str]]:
     """
 
     Busca productos por categoría con opciones de filtrado y ordenamiento, siempre manda categoría.
 
     Args:
         category_id (int): ID de la categoría para buscar productos. Mandatory.
-        top_n (int, opcional): Número máximo de productos a devolver. Por defecto es 5. Optional.
+        top_n (int, opcional): Número máximo de productos a devolver. Por defecto es 4. Optional.
         order_by (str, opcional): [price, name]. Optional.
         order (str, opcional): ['ASC','DESC']. Optional.
         min_price (int, opcional): Optional.
@@ -26,7 +26,7 @@ def search_products_by_category(category_id: int, top_n: Optional[int] = 5, orde
     #     rows = result.fetchall()
 
     if top_n is None:
-        top_n = 5
+        top_n = 4
     if not order:
         order = 'ASC'
     

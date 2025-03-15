@@ -31,6 +31,7 @@ def search_products_by_power_specs(max_power_consumption: float,min_power_consum
             {category_join}
             WHERE ps.max_power_consumption <= {max_power_consumption} AND ps.max_power_consumption >= {min_power_consumption}
             {category_condition}
+            LIMIT 4
         """
 
         if category_id:
